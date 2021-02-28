@@ -6,29 +6,107 @@ import 'firebase/auth'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
+import { useState } from 'react';
 
 firebase.initializeApp({
-  // config
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_FIREBASE_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  // firebase config
+  apiKey: "AIzaSyCHLQnAGCpCbCzvKJxN3WbvpLh4YcOkJDE",
+  authDomain: "le-chat-fbd4c.firebaseapp.com",
+  projectId: "le-chat-fbd4c",
+  storageBucket: "le-chat-fbd4c.appspot.com",
+  messagingSenderId: "159128856128",
+  appId: "1:159128856128:web:5a885c27da81c2bdb3a1a5",
+  measurementId: "G-NV8H0CGYDG"
 })
 
 const auth = firebase.auth()
 const firestore = firebase.firestore()
 
 function App() {
+
+  console.log(process.env.REACT_APP_FIREBASE_APP_ID)
+  const [user] = useAuthState(auth)
+
   return (
     <div className="App">
-      <header className="App-header">
-
+      <header>
+        <SignOut />
       </header>
+
+      <section>
+        { user ? <Chatroom /> : <SignIn /> }
+      </section>
     </div>
   );
+}
+
+function SignIn() {
+
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    auth.signInWithPopup(provider)
+  }
+
+  return (
+    <button onClick={signInWithGoogle}>Sign in with Google</button>
+  )
+}
+
+function SignOut() {
+  return auth.currentUser && (
+    <button onClick={() => auth.signOut()}>Sign Out</button>
+  )
+}
+
+function Chatroom() {
+  const messagesRef = firestore.collection('messages')
+  const query = messagesRef.orderBy('createdAt').limit(25)
+
+  const [messages] = useCollectionData(query, { idField: 'id' })
+
+  const [formValue, setFormValue] = useState('')
+
+  const sendMessage = async(e) => {
+    e.preventDefault()
+
+    const { uid, photoURL } = auth.currentUser
+
+    await messagesRef.add({
+      text: formValue,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      uid,
+      photoURL
+    })
+
+    setFormValue('')
+  }
+
+  return (
+    <>
+      <div>
+        {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+      </div>
+
+      <form onSubmit={sendMessage}>
+        <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+        <button type="submit">SEND</button>
+      </form>
+    </>
+  )
+}
+
+function ChatMessage(props) {
+  const { text, uid, photoURL, createdAt } = props.message
+
+  const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received'
+  console.log(createdAt)
+  // const timestamp = new Date(createdAt)
+  return (
+    <div className={`message ${messageClass}`}>
+      <img src={photoURL} alt="User Avatar" />
+      <p>{text}</p>
+    </div>
+  )
 }
 
 export default App;
