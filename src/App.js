@@ -23,8 +23,6 @@ const auth = firebase.auth()
 const firestore = firebase.firestore()
 
 function App() {
-
-  console.log(process.env.REACT_APP_FIREBASE_APP_ID)
   const [user] = useAuthState(auth)
 
   return (
@@ -99,12 +97,31 @@ function ChatMessage(props) {
   const { text, uid, photoURL, createdAt } = props.message
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received'
-  console.log(createdAt)
+  
+  const timestamp = new Date(createdAt.seconds * 1000)
+  function renderDate(date) {
+    const today = new Date()
+    const yesterday = new Date(); 
+    yesterday.setDate(today.getDate() - 1)
+    if(date.toLocaleDateString() === today.toLocaleDateString()){
+      return 'Today'
+    }else if (date.toLocaleDateString() === yesterday.toLocaleDateString()) {
+      return 'Yesterday'
+    }
+    return date.toLocaleDateString('en-US', {
+      day : 'numeric',
+      month : 'long'
+    })
+  }
+
+  const postTime = `${renderDate(timestamp)} at ${timestamp.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
+  // console.log(createdAt)
   // const timestamp = new Date(createdAt)
   return (
     <div className={`message ${messageClass}`}>
       <img src={photoURL} alt="User Avatar" />
       <p>{text}</p>
+      <p>{postTime}</p>
     </div>
   )
 }
