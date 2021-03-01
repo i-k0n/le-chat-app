@@ -10,6 +10,8 @@ import { useState } from 'react';
 
 import catLogo from './assets/cat.png'
 import signOutIcon from './assets/sign-out-thin.svg'
+import sendIcon from './assets/send.svg'
+import sendIconHover from './assets/send-hover.svg'
 
 
 if (!firebase.apps.length) {
@@ -33,7 +35,7 @@ const firestore = firebase.firestore()
 
 function App() {
   const [user] = useAuthState(auth)
-  console.log(user)
+  // console.log(user)
 
   return (
     <div className="App">
@@ -45,7 +47,7 @@ function App() {
         <SignOut />
       </header>
 
-      <section>
+      <section className="chat-window">
         { user ? <Chatroom /> : <SignIn /> }
       </section>
     </div>
@@ -99,9 +101,9 @@ function Chatroom() {
         {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
       </div>
 
-      <form onSubmit={sendMessage}>
-        <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-        <button type="submit">SEND</button>
+      <form className="message-send-form" onSubmit={sendMessage}>
+        <input className="message-send-input" value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Say something nice..." />
+        <button className="message-send-button" type="submit">Send</button>
       </form>
     </>
   )
@@ -134,8 +136,8 @@ function ChatMessage(props) {
   return (
     <div className={`message ${messageClass}`}>
       <img className="avatar" src={photoURL} alt="User Avatar" />
-      <p>{text}</p>
-      <p>{displayName.split(" ")[0]} <span>{postTime}</span></p>
+      <p className="message-text">{text}</p>
+      <p className="message-user">{displayName.split(" ")[0]} <span className="message-timestamp">{postTime}</span></p>
     </div>
   )
 }

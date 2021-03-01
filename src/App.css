@@ -1,6 +1,8 @@
 /* COLOR VARIABLES */
 :root {
+  --header-bg: #211D1C;
   --pink: #E8BDAC;
+  --chat-bg: #373635;
 }
 
 body {
@@ -19,7 +21,7 @@ body {
 .header {
   height: 60px;
   width: 100%;
-  background-color: #211D1C;
+  background-color: var(--header-bg);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -57,9 +59,48 @@ body {
 
 /* CHAT WINDOW */
 
+.chat-window {
+  background-color: var(--chat-bg);
+}
+
 .avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   padding: 8px;
+}
+
+/* SEND INPUT */
+.message-send-form {
+  background-color: var(--header-bg);
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+}
+
+.message-send-input {
+  background-color: var(--header-bg);
+  border: 0;
+  flex-grow: 1;
+  padding: 12px 16px;
+  font-size: 18px;
+  color: var(--pink);
+}
+
+.message-send-button {
+  background-color: transparent;
+  background: url("./assets/send.svg") top left no-repeat;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  margin: 12px;
+  color: var(--pink);
+  text-indent: -200vw;
+}
+
+.message-send-button:hover {
+  background-image: url("./assets//send-hover.svg");
+  cursor: pointer;
 }
