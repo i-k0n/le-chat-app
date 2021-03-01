@@ -24,13 +24,15 @@ body {
 
 .header {
   height: 60px;
-  width: 100%;
+  width: 480px;
   background-color: var(--header-bg);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px;
   box-sizing: border-box;
+  position: fixed;
+  top: 0;
 }
 
 .logo {
@@ -67,7 +69,25 @@ body {
   background-color: var(--chat-bg);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100vh - 120px);
+  margin: 60px 0;
+}
+
+.messages-container {
+  overflow-y: scroll;
+  height: calc(100% -120px);
+}
+
+.messages-container::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: var(--chat-bg);
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background-color: var(--header-bg);
 }
 
 .message {
@@ -127,11 +147,13 @@ body {
 /* SEND INPUT */
 .message-send-form {
   background-color: var(--header-bg);
-  width: 100%;
+  width: 480px;
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 60px;
+  position: fixed;
+  bottom: 0;
 }
 
 .message-send-input {
