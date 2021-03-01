@@ -1,38 +1,65 @@
+/* COLOR VARIABLES */
+:root {
+  --pink: #E8BDAC;
+}
+
+body {
+  background-color: #434140;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+.header {
+  height: 60px;
+  width: 100%;
+  background-color: #211D1C;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
-.App-link {
-  color: #61dafb;
+.logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logo-image {
+  height: 28px;
+}
+
+.logo-text {
+  font-family: Roboto, "Open Sans", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  color: var(--pink);
+  margin-left: 8px;
+}
+
+.sign-out {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.sign-out > img {
+  height: 28px;
+}
+
+
+/* CHAT WINDOW */
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  padding: 8px;
 }

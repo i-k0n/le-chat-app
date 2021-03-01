@@ -8,26 +8,40 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useState } from 'react';
 
-firebase.initializeApp({
-  // firebase config
-  apiKey: "AIzaSyCHLQnAGCpCbCzvKJxN3WbvpLh4YcOkJDE",
-  authDomain: "le-chat-fbd4c.firebaseapp.com",
-  projectId: "le-chat-fbd4c",
-  storageBucket: "le-chat-fbd4c.appspot.com",
-  messagingSenderId: "159128856128",
-  appId: "1:159128856128:web:5a885c27da81c2bdb3a1a5",
-  measurementId: "G-NV8H0CGYDG"
-})
+import catLogo from './assets/cat.png'
+import signOutIcon from './assets/sign-out-thin.svg'
+
+
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    // firebase config
+    apiKey: "AIzaSyCHLQnAGCpCbCzvKJxN3WbvpLh4YcOkJDE",
+    authDomain: "le-chat-fbd4c.firebaseapp.com",
+    projectId: "le-chat-fbd4c",
+    storageBucket: "le-chat-fbd4c.appspot.com",
+    messagingSenderId: "159128856128",
+    appId: "1:159128856128:web:5a885c27da81c2bdb3a1a5",
+    measurementId: "G-NV8H0CGYDG"
+  })
+}else {
+  firebase.app(); // if already initialized, use that one
+}
+
 
 const auth = firebase.auth()
 const firestore = firebase.firestore()
 
 function App() {
   const [user] = useAuthState(auth)
+  console.log(user)
 
   return (
     <div className="App">
-      <header>
+      <header className="header">
+        <div className="logo">
+          <img className="logo-image" src={catLogo} alt="logo" />
+          <h3 className="logo-text">Le Chat</h3>
+        </div>
         <SignOut />
       </header>
 
@@ -39,7 +53,6 @@ function App() {
 }
 
 function SignIn() {
-
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider()
     auth.signInWithPopup(provider)
@@ -52,7 +65,7 @@ function SignIn() {
 
 function SignOut() {
   return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
+    <button className="sign-out" onClick={() => auth.signOut()}><img src={signOutIcon} alt="Sign Out" /></button>
   )
 }
 
@@ -67,13 +80,14 @@ function Chatroom() {
   const sendMessage = async(e) => {
     e.preventDefault()
 
-    const { uid, photoURL } = auth.currentUser
+    const { uid, photoURL, displayName } = auth.currentUser
 
     await messagesRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
-      photoURL
+      photoURL,
+      displayName
     })
 
     setFormValue('')
@@ -94,7 +108,7 @@ function Chatroom() {
 }
 
 function ChatMessage(props) {
-  const { text, uid, photoURL, createdAt } = props.message
+  const { text, uid, photoURL, createdAt, displayName } = props.message
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received'
   
@@ -119,9 +133,9 @@ function ChatMessage(props) {
   // const timestamp = new Date(createdAt)
   return (
     <div className={`message ${messageClass}`}>
-      <img src={photoURL} alt="User Avatar" />
+      <img className="avatar" src={photoURL} alt="User Avatar" />
       <p>{text}</p>
-      <p>{postTime}</p>
+      <p>{displayName.split(" ")[0]} <span>{postTime}</span></p>
     </div>
   )
 }
