@@ -2,6 +2,10 @@
 :root {
   --header-bg: #211D1C;
   --pink: #E8BDAC;
+  --received-bg: #F0ECE4;
+  --received-text: #383635;
+  --sent-bg: #1E1C1A;
+  --timestamp: #888888;
   --chat-bg: #373635;
 }
 
@@ -61,13 +65,63 @@ body {
 
 .chat-window {
   background-color: var(--chat-bg);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
+
+.message {
+  display: flex;
+  color: var(--received-text);
+}
+
+.message.sent {
+  flex-direction: row-reverse;
+  color: var(--pink);
+}
+
 
 .avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   padding: 8px;
+}
+
+.message-content {
+  margin-bottom: 8px;
+}
+
+.message-text {
+  background-color: var(--received-bg);
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 16px;
+  border-radius: 3px 20px 20px 20px;
+  margin: 8px 0;
+}
+
+.sent .message-text {
+  background-color: var(--sent-bg);
+  border-radius: 20px 3px 20px 20px;
+}
+
+.message-user {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--received-bg);
+  margin: 8px 0;
+}
+
+.sent .message-user {
+  color: var(--pink);
+}
+
+.message-timestamp {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--timestamp);
+  margin-left: 0.2rem;
 }
 
 /* SEND INPUT */

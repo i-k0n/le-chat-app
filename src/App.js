@@ -10,8 +10,6 @@ import { useState } from 'react';
 
 import catLogo from './assets/cat.png'
 import signOutIcon from './assets/sign-out-thin.svg'
-import sendIcon from './assets/send.svg'
-import sendIconHover from './assets/send-hover.svg'
 
 
 if (!firebase.apps.length) {
@@ -136,8 +134,10 @@ function ChatMessage(props) {
   return (
     <div className={`message ${messageClass}`}>
       <img className="avatar" src={photoURL} alt="User Avatar" />
-      <p className="message-text">{text}</p>
-      <p className="message-user">{displayName.split(" ")[0]} <span className="message-timestamp">{postTime}</span></p>
+      <div className="message-content">
+        <p className="message-user">{displayName.split(" ")[0]} <span className="message-timestamp">{postTime}</span></p>
+        <p className="message-text">{text}</p>
+      </div>
     </div>
   )
 }
