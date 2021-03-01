@@ -75,6 +75,18 @@ function Chatroom() {
 
   const [messages] = useCollectionData(query, { idField: 'id' })
 
+  return (
+    <>
+      <div className="messages-container">
+        {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+      </div>
+
+      <MessageForm messagesRef={messagesRef} />
+    </>
+  )
+}
+
+function MessageForm({ messagesRef }) {
   const [formValue, setFormValue] = useState('')
 
   const sendMessage = async(e) => {
@@ -94,24 +106,18 @@ function Chatroom() {
   }
 
   return (
-    <>
-      <div>
-        {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-      </div>
-
-      <form className="message-send-form" onSubmit={sendMessage}>
-        <input className="message-send-input" value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Say something nice..." />
-        <button className="message-send-button" type="submit">Send</button>
-      </form>
-    </>
+    <form className="message-send-form" onSubmit={sendMessage}>
+      <input className="message-send-input" value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Say something nice..." />
+      <button className="message-send-button" type="submit">Send</button>
+    </form>
   )
 }
 
 function ChatMessage(props) {
   const { text, uid, photoURL, createdAt, displayName } = props.message
-
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received'
-  
+
+  // calculate "Today" or "Yesterday" for timestamps
   const timestamp = new Date(createdAt.seconds * 1000)
   function renderDate(date) {
     const today = new Date()
@@ -129,7 +135,7 @@ function ChatMessage(props) {
   }
 
   const postTime = `${renderDate(timestamp)} at ${timestamp.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
-  // console.log(createdAt)
+
   // const timestamp = new Date(createdAt)
   return (
     <div className={`message ${messageClass}`}>
